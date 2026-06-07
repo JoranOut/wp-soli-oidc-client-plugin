@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Build artifacts
+*.zip
+
+# OIDC signing keys
+.oidc-keys/*.key
+
+# Test outputs
+playwright-report/
+test-results/
+artifacts/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Claude/Playwright MCP
+.claude/
+.playwright-mcp/

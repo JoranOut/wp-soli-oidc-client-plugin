@@ -1,0 +1,62 @@
+# Dutch (Netherlands) translation for Soli OIDC Client Plugin.
+# Copyright (C) 2026 Joran Out
+# This file is distributed under the same license as the Soli OIDC Client Plugin plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Soli OIDC Client Plugin 0.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-soli-oidc-client-plugin\n"
+"Last-Translator: Joran Out\n"
+"Language-Team: Dutch\n"
+"Language: nl_NL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-06-07T09:02:02+00:00\n"
+"PO-Revision-Date: 2026-06-07 09:02+0000\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: soli-oidc-client\n"
+
+#. Plugin Name of the plugin
+#: wp-soli-oidc-client-plugin.php
+msgid "Soli OIDC Client Plugin"
+msgstr "Soli OIDC Client Plugin"
+
+#. Description of the plugin
+#: wp-soli-oidc-client-plugin.php
+msgid "OIDC client plugin for WordPress sites consuming the Soli Laravel provider"
+msgstr "OIDC client plugin voor WordPress-sites die de Soli Laravel provider gebruiken"
+
+#. Author of the plugin
+#: wp-soli-oidc-client-plugin.php
+msgid "Joran Out"
+msgstr "Joran Out"
+
+#: includes/class-soli-oidc-client-dependency-checker.php:36
+#: includes/class-soli-oidc-client-settings.php:40
+#: includes/class-soli-oidc-client-settings.php:41
+msgid "Soli OIDC Client"
+msgstr "Soli OIDC Client"
+
+#: includes/class-soli-oidc-client-dependency-checker.php:37
+msgid "The OpenID Connect Generic plugin is required but not installed or activated."
+msgstr "De OpenID Connect Generic plugin is vereist maar niet geïnstalleerd of geactiveerd."
+
+#: includes/class-soli-oidc-client-dependency-checker.php:39
+msgid "Get the plugin"
+msgstr "Download de plugin"
+
+#: includes/class-soli-oidc-client-login-customizer.php:92
+msgid "Try again"
+msgstr "Probeer opnieuw"
+
+#: includes/class-soli-oidc-client-settings.php:64
+msgid "Provider Settings"
+msgstr "Provider-instellingen"
+
+#: includes/class-soli-oidc-client-settings.php:71
+msgid "Provider Logout URL"
+msgstr "Provider uitlog-URL"
+
+#: includes/class-soli-oidc-client-settings.php:92
+msgid "The logout endpoint on the identity provider. Used to clear the provider session when login errors occur."
+msgstr "Het uitlog-endpoint van de identity provider. Wordt gebruikt om de providersessie te wissen wanneer er inlogfouten optreden."
