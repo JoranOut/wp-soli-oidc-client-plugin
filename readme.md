@@ -34,11 +34,20 @@ This plugin extends the OpenID Connect Generic (daggerhart) plugin to consume OI
 ## Development
 
 ```bash
-# Start local environment
-npm run wp-env:start
+# Start the local environment: an OIDC client on :8888 and a test OIDC
+# provider on :8889. Signing keys for the provider are generated on first
+# start and are never committed.
+npm run env:start
 
-# Run tests
-npm run test
+# Run the E2E suite
+npm run test:e2e
+```
+
+Both ports are configurable, so a second checkout can run alongside:
+
+```bash
+WP_ENV_PORT=9888 WP_ENV_TESTS_PORT=9889 npm run env:start
+WP_ENV_PORT=9888 WP_ENV_TESTS_PORT=9889 npm run test:e2e
 ```
 
 ## Changelog
