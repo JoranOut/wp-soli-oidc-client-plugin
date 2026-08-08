@@ -17,6 +17,10 @@ const config = defineConfig({
     // single wp-env pair, so parallel workers would race each other.
     workers: 1,
     retries: process.env.CI ? 1 : 0,
+    // A cold PHP request on a loaded CI runner routinely exceeds Playwright's
+    // 5s default. Raising the ceiling only affects how long a failing
+    // assertion waits, never whether it has to hold.
+    expect: { timeout: 15000 },
     reporter: [['html', { open: 'never' }], ['list']],
     use: {
         baseURL: CLIENT_URL,
