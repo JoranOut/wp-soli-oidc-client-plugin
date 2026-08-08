@@ -14,11 +14,23 @@ const { CLIENT_URL, PROVIDER_URL } = require( './urls' );
  * @param {import('@playwright/test').Page} page
  */
 async function loginAsAdmin( page ) {
-	await page.goto( `${ CLIENT_URL }/wp-login.php?bypass-sso` );
+	await page.goto( `${ CLIENT_URL }/wp-login.php?bypass-sso`, {
+		waitUntil: 'domcontentloaded',
+	} );
 	await page.locator( '#user_login' ).fill( 'admin' );
 	await page.locator( '#user_pass' ).fill( 'password' );
-	await page.locator( '#wp-submit' ).click();
-	await expect( page.locator( '#wpadminbar' ) ).toBeVisible();
+
+	// Wait for the POST's navigation explicitly. The default 5s expect timeout
+	// is not enough for a cold PHP request on a loaded CI runner, which showed
+	// up as a flaky #wpadminbar assertion.
+	await Promise.all( [
+		page.waitForURL( /wp-admin/, { timeout: 60000 } ),
+		page.locator( '#wp-submit' ).click(),
+	] );
+
+	await expect( page.locator( '#wpadminbar' ) ).toBeVisible( {
+		timeout: 30000,
+	} );
 }
 
 /**
