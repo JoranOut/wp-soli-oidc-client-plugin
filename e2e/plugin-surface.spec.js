@@ -7,7 +7,7 @@
  */
 const { test, expect } = require( '@playwright/test' );
 const { CLIENT_URL } = require( './urls' );
-const { loginAsAdmin, ajax } = require( './helpers' );
+const { loginAsAdmin, ajax, expectNoPhpDiagnostics } = require( './helpers' );
 
 const PLUGIN_ROW =
 	'tr[data-plugin="wp-soli-oidc-client-plugin/wp-soli-oidc-client-plugin.php"]';
@@ -23,10 +23,14 @@ test.describe( 'Plugin surface', () => {
 
 		// WP_DEBUG_DISPLAY is on, so anything the plugin raises while loading
 		// would be printed straight into the page.
-		const body = await page.locator( 'body' ).innerText();
-		expect( body ).not.toMatch(
-			/(Fatal error|Parse error|Warning:|Notice:|Deprecated:)/
-		);
+		//
+		// Previously asserted with an unscoped pattern, which would have failed
+		// on any deprecation from the third-party daggerhart plugin this one
+		// adapts. The shared helper scopes the softer diagnostics to this repo's
+		// own files while keeping fatals unscoped. This only covers the admin
+		// request; the login screen is a front-end surface and is asserted in
+		// php-diagnostics.spec.js.
+		await expectNoPhpDiagnostics( page );
 	} );
 
 	test( 'plugin registers its classes, constants and claim hook', async ( {

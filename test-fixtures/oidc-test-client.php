@@ -24,7 +24,7 @@ add_filter( 'oidc_minimal_capability', function (): string {
 add_filter( 'oidc_registered_clients', function ( array $clients ): array {
 	$redirect_uri = get_option(
 		'soli_test_client_redirect_uri',
-		'http://localhost:8888/wp-admin/admin-ajax.php?action=openid-connect-authorize'
+		'http://localhost:8904/wp-admin/admin-ajax.php?action=openid-connect-authorize'
 	);
 
 	$clients['soli-dev-client'] = array(

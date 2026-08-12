@@ -8,7 +8,7 @@ import { defineConfig } from '@playwright/test';
  * provider is a vanilla OIDC server that doesn't emit that header.
  * Our tests only need browser-based flows, not REST API utilities.
  */
-const CLIENT_PORT = process.env.WP_ENV_PORT || '8888';
+const CLIENT_PORT = process.env.WP_ENV_PORT || '8904';
 const CLIENT_URL = process.env.CLIENT_URL || `http://localhost:${ CLIENT_PORT }`;
 
 const config = defineConfig({

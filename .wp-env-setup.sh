@@ -43,8 +43,8 @@ fi
 # =============================================================================
 # wp-env's own defaults, overridable with the same variables wp-env reads, so a
 # second checkout can run alongside this one on different ports.
-CLIENT_URL="http://localhost:${WP_ENV_PORT:-8888}"
-PROVIDER_URL="http://localhost:${WP_ENV_TESTS_PORT:-8889}"
+CLIENT_URL="http://localhost:${WP_ENV_PORT:-8904}"
+PROVIDER_URL="http://localhost:${WP_ENV_TESTS_PORT:-8905}"
 
 # Fail loudly if WordPress disagrees with what we just computed - otherwise the
 # OIDC endpoints would be silently wrong and every SSO test would time out.

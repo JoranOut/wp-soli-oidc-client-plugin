@@ -5,6 +5,59 @@ const { expect } = require( '@playwright/test' );
 const { CLIENT_URL, PROVIDER_URL } = require( './urls' );
 
 /**
+ * Fragment matching any PHP file this repository owns.
+ *
+ * Used to scope the softer PHP diagnostics (warnings, notices, deprecations) to
+ * code this repository owns. Scoping matters more here than in most Soli
+ * plugins: this plugin is an adapter around the third-party
+ * `daggerhart-openid-connect-generic` plugin, whose own deprecations must not
+ * turn CI red. daggerhart lives under `daggerhart-openid-connect-generic/`, so
+ * matching on this plugin's directory excludes it while still covering
+ * everything this repo ships - the main file, `includes/class-soli-oidc-*.php`,
+ * `updater.php` and `uninstall.php`.
+ *
+ * The `test-fixtures/*.php` mu-plugins are deliberately out of scope: wp-env
+ * maps them to `wp-content/mu-plugins/`, outside the plugin directory, and they
+ * are test scaffolding rather than shipped code.
+ */
+const PLUGIN_PHP_FILES = 'wp-soli-oidc-client-plugin/[\\w/-]+\\.php';
+
+/** Diagnostics that are never acceptable, wherever they come from. */
+const FATAL_ERROR_PATTERN = /Fatal error|Parse error/i;
+
+/** Softer diagnostics, but only when they point at this plugin's files. */
+const PLUGIN_DIAGNOSTIC_PATTERN = new RegExp(
+	'(Warning|Notice|Deprecated):[^\\n]*(' + PLUGIN_PHP_FILES + ')',
+	'i'
+);
+
+/**
+ * Asserts that the currently loaded page contains no PHP diagnostics.
+ *
+ * `WP_DEBUG` and `WP_DEBUG_DISPLAY` are enabled for the wp-env `development`
+ * environment - which is the one hosting this plugin, see `.wp-env.json` - so
+ * PHP diagnostics are printed into the rendered document. Anything PHP emits
+ * before `<html>` or inside `<head>` is relocated into the body by the HTML
+ * parser, so reading the body text catches diagnostics from any point in the
+ * request. `debug-mode.spec.js` guards that both constants really are on,
+ * because without them this assertion passes unconditionally.
+ *
+ * @param {import('@playwright/test').Page} page
+ */
+async function expectNoPhpDiagnostics( page ) {
+	const url = page.url();
+	const body = await page.locator( 'body' ).innerText();
+
+	expect( body, `PHP fatal/parse error rendered by ${ url }` ).not.toMatch(
+		FATAL_ERROR_PATTERN
+	);
+	expect(
+		body,
+		`PHP warning/notice/deprecation from this plugin rendered by ${ url }`
+	).not.toMatch( PLUGIN_DIAGNOSTIC_PATTERN );
+}
+
+/**
  * Log into the client without touching the identity provider.
  *
  * The client runs with login_type=auto, so ?bypass-sso is what makes the native
@@ -98,4 +151,12 @@ async function loginViaSSO( page, context, username, password ) {
 	expect( page.url() ).not.toContain( 'login-error' );
 }
 
-module.exports = { loginAsAdmin, ajax, loginViaSSO };
+module.exports = {
+	PLUGIN_PHP_FILES,
+	FATAL_ERROR_PATTERN,
+	PLUGIN_DIAGNOSTIC_PATTERN,
+	expectNoPhpDiagnostics,
+	loginAsAdmin,
+	ajax,
+	loginViaSSO,
+};

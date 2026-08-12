@@ -3,7 +3,7 @@
  * Test Fixture: OIDC Laravel Claims
  *
  * This mu-plugin hooks into the OpenID Connect Server plugin on the test
- * provider (port 8889) and transforms user claims to match the format
+ * provider (port 8905) and transforms user claims to match the format
  * returned by the Soli Laravel identity provider.
  *
  * Laravel format:

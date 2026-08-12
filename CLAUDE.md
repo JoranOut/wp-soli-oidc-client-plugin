@@ -122,7 +122,7 @@ Configure under **Settings > Soli OIDC Client** in WordPress admin.
 ### Testing
 
 ```bash
-# Start environment (includes OIDC client on 8888, provider on 8889)
+# Start environment (includes OIDC client on 8904, provider on 8905)
 npm run env:start
 
 # Run tests
@@ -135,7 +135,7 @@ npm run test:e2e:headed
 ### Test Setup
 
 The test environment uses:
-- **Port 8888**: WordPress with daggerhart OIDC client + this plugin
-- **Port 8889**: WordPress with OIDC server + `oidc-laravel-claims.php` mu-plugin
+- **Port 8904**: WordPress with daggerhart OIDC client + this plugin
+- **Port 8905**: WordPress with OIDC server + `oidc-laravel-claims.php` mu-plugin
 
 The `oidc-laravel-claims.php` mu-plugin on the test provider hooks into `oidc_user_claims` to return claims in the Laravel format (`roles` array, `assignments` array).
