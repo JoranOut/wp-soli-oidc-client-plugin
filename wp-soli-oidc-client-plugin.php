@@ -27,6 +27,7 @@ require_once SOLI_OIDC_CLIENT__PLUGIN_DIR_PATH . 'includes/class-soli-oidc-clien
 require_once SOLI_OIDC_CLIENT__PLUGIN_DIR_PATH . 'includes/class-soli-oidc-client-role-sync.php';
 require_once SOLI_OIDC_CLIENT__PLUGIN_DIR_PATH . 'includes/class-soli-oidc-client-assignments-sync.php';
 require_once SOLI_OIDC_CLIENT__PLUGIN_DIR_PATH . 'includes/class-soli-oidc-client-login-customizer.php';
+require_once SOLI_OIDC_CLIENT__PLUGIN_DIR_PATH . 'includes/class-soli-oidc-client-token-diagnostics.php';
 
 add_action( 'init', function () {
 	load_plugin_textdomain( 'soli-oidc-client', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
@@ -73,4 +74,7 @@ if ( Dependency_Checker::is_oidc_client_active() ) {
 
 	$soli_oidc_client_login_customizer = new Login_Customizer();
 	$soli_oidc_client_login_customizer->init();
+
+	$soli_oidc_client_token_diagnostics = new Token_Diagnostics();
+	$soli_oidc_client_token_diagnostics->init();
 }
