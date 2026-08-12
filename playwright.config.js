@@ -17,6 +17,12 @@ const config = defineConfig({
     // single wp-env pair, so parallel workers would race each other.
     workers: 1,
     retries: process.env.CI ? 1 : 0,
+    // Playwright's 30s default is below what these tests need: a single test can
+    // perform a native admin login and a full SSO handshake, and helpers.js
+    // already declares a 60s wait for the admin login alone - unreachable under a
+    // 30s test timeout, so a slow login failed as an unexplained test timeout
+    // rather than as its own assertion.
+    timeout: 90_000,
     // A cold PHP request on a loaded CI runner routinely exceeds Playwright's
     // 5s default. Raising the ceiling only affects how long a failing
     // assertion waits, never whether it has to hold.

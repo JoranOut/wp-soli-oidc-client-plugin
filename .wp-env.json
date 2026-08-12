@@ -10,7 +10,8 @@
       ],
       "themes": [],
       "mappings": {
-        "wp-content/mu-plugins/oidc-test-helper.php": "./test-fixtures/oidc-test-helper.php"
+        "wp-content/mu-plugins/oidc-test-helper.php": "./test-fixtures/oidc-test-helper.php",
+        "wp-content/mu-plugins/oidc-token-failure.php": "./test-fixtures/oidc-token-failure.php"
       },
       "config": {
         "WP_DEBUG": true,
