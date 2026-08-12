@@ -42,11 +42,24 @@ const PLUGIN_DIAGNOSTIC_PATTERN = new RegExp(
  * request. `debug-mode.spec.js` guards that both constants really are on,
  * because without them this assertion passes unconditionally.
  *
+ * Read `textContent()`, never `innerText()`. `innerText` returns *rendered*
+ * text, so it silently drops anything the CSS hides - and a diagnostic that
+ * happens to land inside a hidden container then makes this assertion pass
+ * vacuously. That is not hypothetical here: `Login_Customizer::
+ * hide_login_form_on_error()` prints a stylesheet that sets
+ * `#loginform, .openid-connect-login-button, #nav, #backtoblog { display: none
+ * !important }` on every `?login-error` page, which is exactly the surface
+ * these tests exercise. Any diagnostic emitted while those elements render
+ * would be invisible to `innerText`. `textContent` walks the DOM instead of the
+ * layout, so it sees hidden nodes too. The same swap was measured in two
+ * sibling repos: with the identical injected error, `textContent` failed and
+ * `innerText` passed blind.
+ *
  * @param {import('@playwright/test').Page} page
  */
 async function expectNoPhpDiagnostics( page ) {
 	const url = page.url();
-	const body = await page.locator( 'body' ).innerText();
+	const body = await page.locator( 'body' ).textContent();
 
 	expect( body, `PHP fatal/parse error rendered by ${ url }` ).not.toMatch(
 		FATAL_ERROR_PATTERN
