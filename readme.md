@@ -34,8 +34,8 @@ This plugin extends the OpenID Connect Generic (daggerhart) plugin to consume OI
 ## Development
 
 ```bash
-# Start the local environment: an OIDC client on :8888 and a test OIDC
-# provider on :8889. Signing keys for the provider are generated on first
+# Start the local environment: an OIDC client on :8904 and a test OIDC
+# provider on :8905. Signing keys for the provider are generated on first
 # start and are never committed.
 npm run env:start
 
