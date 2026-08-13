@@ -32,6 +32,61 @@ const PLUGIN_DIAGNOSTIC_PATTERN = new RegExp(
 );
 
 /**
+ * Reads the body text of the current page twice, for the two assertions below.
+ *
+ * Read `textContent`, never `innerText`. `innerText` returns *rendered* text,
+ * so it silently drops anything the CSS hides - and a diagnostic that happens
+ * to land inside a hidden container then makes the assertion pass vacuously.
+ * That is not hypothetical here: `Login_Customizer::hide_login_form_on_error()`
+ * prints a stylesheet that sets `#loginform, .openid-connect-login-button,
+ * #nav, #backtoblog { display: none !important }` on every `?login-error`
+ * page, which is exactly the surface these tests exercise. Any diagnostic
+ * emitted while those elements render would be invisible to `innerText`.
+ * `textContent` walks the DOM instead of the layout, so it sees hidden nodes
+ * too. The same swap was measured in two sibling repos: with the identical
+ * injected error, `textContent` failed and `innerText` passed blind. Do not
+ * change these reads back.
+ *
+ * `textContent` also returns the source text of `<script>` and `<style>`
+ * elements, which `innerText` does not - and that cuts both ways, so the two
+ * assertions read different strings:
+ *
+ * - `markup` (a body clone with `script, style, template, noscript` stripped)
+ *   feeds the path-scoped assertion. `PLUGIN_DIAGNOSTIC_PATTERN` matches
+ *   *within a line* (`[^\n]*`), and wp-admin prints large single-line JSON
+ *   blobs into inline script, so a `Warning:` string sitting near this
+ *   plugin's path in one of those blobs would match. That pattern must not see
+ *   script text. This was demonstrated against the old single-read helper in
+ *   two sibling repos.
+ * - `full` (the untouched body text, scripts included) feeds the fatal
+ *   assertion. A fatal thrown while an inline script is being printed lands
+ *   inside that `<script>` node, so a stripped clone would lose it. The fatal
+ *   pattern MUST see script text. `Fatal error` / `Parse error` are also far
+ *   less likely than `Warning:` to occur incidentally in script source.
+ *
+ * Scoping the read is the right fix; loosening the patterns to tolerate script
+ * noise would blunt the diagnostic itself.
+ *
+ * @param {import('@playwright/test').Page} page
+ * @return {Promise<{full: string, markup: string}>} Full body text, and body
+ *                                                   text with script/style
+ *                                                   sources removed.
+ */
+function readBodyText( page ) {
+	return page.evaluate( () => {
+		const clone = document.body.cloneNode( true );
+		clone
+			.querySelectorAll( 'script, style, template, noscript' )
+			.forEach( ( node ) => node.remove() );
+
+		return {
+			full: document.body.textContent || '',
+			markup: clone.textContent || '',
+		};
+	} );
+}
+
+/**
  * Asserts that the currently loaded page contains no PHP diagnostics.
  *
  * `WP_DEBUG` and `WP_DEBUG_DISPLAY` are enabled for the wp-env `development`
@@ -42,30 +97,20 @@ const PLUGIN_DIAGNOSTIC_PATTERN = new RegExp(
  * request. `debug-mode.spec.js` guards that both constants really are on,
  * because without them this assertion passes unconditionally.
  *
- * Read `textContent()`, never `innerText()`. `innerText` returns *rendered*
- * text, so it silently drops anything the CSS hides - and a diagnostic that
- * happens to land inside a hidden container then makes this assertion pass
- * vacuously. That is not hypothetical here: `Login_Customizer::
- * hide_login_form_on_error()` prints a stylesheet that sets
- * `#loginform, .openid-connect-login-button, #nav, #backtoblog { display: none
- * !important }` on every `?login-error` page, which is exactly the surface
- * these tests exercise. Any diagnostic emitted while those elements render
- * would be invisible to `innerText`. `textContent` walks the DOM instead of the
- * layout, so it sees hidden nodes too. The same swap was measured in two
- * sibling repos: with the identical injected error, `textContent` failed and
- * `innerText` passed blind.
+ * See `readBodyText()` for why this reads `textContent` and not `innerText`,
+ * and why the two assertions read different strings.
  *
  * @param {import('@playwright/test').Page} page
  */
 async function expectNoPhpDiagnostics( page ) {
 	const url = page.url();
-	const body = await page.locator( 'body' ).textContent();
+	const { full, markup } = await readBodyText( page );
 
-	expect( body, `PHP fatal/parse error rendered by ${ url }` ).not.toMatch(
+	expect( full, `PHP fatal/parse error rendered by ${ url }` ).not.toMatch(
 		FATAL_ERROR_PATTERN
 	);
 	expect(
-		body,
+		markup,
 		`PHP warning/notice/deprecation from this plugin rendered by ${ url }`
 	).not.toMatch( PLUGIN_DIAGNOSTIC_PATTERN );
 }
