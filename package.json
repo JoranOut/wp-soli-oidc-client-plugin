@@ -13,6 +13,13 @@
     "i18n:make-pot": "wp-env run cli wp i18n make-pot wp-content/plugins/wp-soli-oidc-client-plugin wp-content/plugins/wp-soli-oidc-client-plugin/languages/soli-oidc-client.pot",
     "i18n:make-mo": "wp-env run cli wp i18n make-mo wp-content/plugins/wp-soli-oidc-client-plugin/languages/"
   },
+  "engines": {
+    "node": ">=24"
+  },
+  "wordpress": {
+    "_comment": "Oldest supported WordPress branch. The e2e suite runs against the newest patch of this branch as well as the newest release, and the release workflows stamp it into the plugin's 'requires'. Raise it when production no longer runs it.",
+    "requiresAtLeast": "6.9"
+  },
   "keywords": [],
   "author": "Joran Out",
   "license": "GPL-2.0-or-later",
