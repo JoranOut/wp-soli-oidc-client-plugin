@@ -49,8 +49,13 @@ add_action( 'init', function () {
 			// GitHub releases API and overrides this with the release's zip asset.
 			'zip_url'            => 'https://github.com/JoranOut/wp-soli-oidc-client-plugin/releases/latest/download/wp-soli-oidc-client-plugin.zip',
 			'sslverify'          => true,
-			'requires'           => '6.0.0',
-			'tested'             => '6.7.0',
+			// Both ends of the supported range are rewritten at packaging time by
+			// the nightly and release workflows, from the same two numbers the
+			// e2e matrix runs against: 'requires' from package.json's
+			// wordpress.requiresAtLeast, 'tested' from wordpress.org's current
+			// release. Do not reformat.
+			'requires'           => '6.9',
+			'tested'             => '7.0.4',
 			'readme'             => 'readme.md',
 		);
 
