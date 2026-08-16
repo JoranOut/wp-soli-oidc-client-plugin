@@ -103,6 +103,8 @@ wp-soli-oidc-client-plugin/
 
 Configure under **Settings > Soli OIDC Client** in WordPress admin.
 
+The settings page also has an **Assignments Viewer**: pick a user to pretty-print their `soli_oidc_assignments` user meta (read-only, for debugging what synced at their last SSO login).
+
 ## User Meta
 
 | Key | Description |
