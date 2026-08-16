@@ -8,7 +8,7 @@
  *
  * Laravel format:
  * - roles: array of role strings (e.g. ["editor", "subscriber"])
- * - assignments: array of objects with onderdeel_id, instrument_soort_id, instrument_soort, instrument_familie
+ * - assignments: array of objects with onderdeel_id, onderdeel, onderdeel_slug, instrument_soort_id, instrument_soort, instrument_familie
  *
  * This replaces the old passport plugin's single "user_role" string claim.
  */
@@ -41,6 +41,8 @@ add_filter( 'oidc_user_claims', function ( array $claims, \WP_User $user ) {
 		if ( in_array( 'administrator', $user->roles, true ) || in_array( 'subscriber', $user->roles, true ) ) {
 			$assignments[] = array(
 				'onderdeel_id'       => 1,
+				'onderdeel'          => 'Harmonie orkest',
+				'onderdeel_slug'     => 'harmonie-orkest',
 				'instrument_soort_id' => 5,
 				'instrument_soort'   => 'Trompet',
 				'instrument_familie' => 'Koperblazers',

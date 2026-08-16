@@ -59,6 +59,8 @@ This plugin handles the client side of the OIDC authentication flow:
   "assignments": [
     {
       "onderdeel_id": 1,
+      "onderdeel": "Harmonie orkest",
+      "onderdeel_slug": "harmonie-orkest",
       "instrument_soort_id": 5,
       "instrument_soort": "Trompet",
       "instrument_familie": "Koperblazers"
@@ -69,6 +71,8 @@ This plugin handles the client side of the OIDC authentication flow:
 
 - Array of assignment objects with orchestra/instrument details
 - `onderdeel_id` — Orchestra/group ID
+- `onderdeel` — Orchestra/group name
+- `onderdeel_slug` — URL-safe slug of the group name (Laravel `Str::slug`)
 - `instrument_soort_id` — Instrument type ID
 - `instrument_soort` — Instrument type name
 - `instrument_familie` — Instrument family name (nullable)
