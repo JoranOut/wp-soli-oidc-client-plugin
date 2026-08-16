@@ -51,6 +51,8 @@ test.describe( 'Role Sync over SSO', () => {
 		expect( body.data ).toEqual( [
 			{
 				onderdeel_id: '1',
+				onderdeel: 'Harmonie orkest',
+				onderdeel_slug: 'harmonie-orkest',
 				instrument_soort_id: '5',
 				instrument_soort: 'Trompet',
 				instrument_familie: 'Koperblazers',
