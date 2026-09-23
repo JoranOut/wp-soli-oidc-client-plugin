@@ -99,7 +99,7 @@ jobs:
           WANTED="${{ steps.wp.outputs.version }}"
 
           for container in cli tests-cli; do
-            RAW=$(npx wp-env run "$container" wp core version 2>&1 | tr -d '\r')
+            RAW=$(npx @wordpress/env run "$container" wp core version 2>&1 | tr -d '\r')
             ACTUAL=$(printf '%s\n' "$RAW" | grep -oE '^[0-9]+\.[0-9]+(\.[0-9]+)?$' | head -1 || true)
 
             if [ -z "$ACTUAL" ]; then
