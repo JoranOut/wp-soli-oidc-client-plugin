@@ -25,6 +25,9 @@ add_filter( 'oidc_user_claims', function ( array $claims, \WP_User $user ) {
 	// Add email claim (required by daggerhart OIDC client, not included by OIDC Server plugin)
 	$claims['email'] = $user->user_email;
 
+	// The Laravel provider marks every address verified; daggerhart 3.11.5+ refuses to link existing users without it.
+	$claims['email_verified'] = true;
+
 	// Build roles array from WordPress roles
 	$claims['roles'] = array_values( $user->roles );
 
