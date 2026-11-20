@@ -130,7 +130,7 @@ wp-env run cli wp option update openid_connect_generic_settings "{
   \"nickname_key\": \"nickname\",
   \"email_format\": \"{email}\",
   \"displayname_format\": \"{given_name} {family_name}\",
-  \"identify_with_username\": \"1\",
+  \"identify_with_username\": \"0\",
   \"state_time_limit\": \"300\",
   \"token_refresh_enable\": \"1\",
   \"http_request_timeout\": \"5\",
