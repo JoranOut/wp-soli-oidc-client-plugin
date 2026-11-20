@@ -7,7 +7,7 @@
     "development": {
       "plugins": [
         ".",
-        "https://downloads.wordpress.org/plugin/daggerhart-openid-connect-generic.zip"
+        "https://downloads.wordpress.org/plugin/daggerhart-openid-connect-generic.3.11.5.zip"
       ],
       "themes": [],
       "mappings": {
@@ -24,7 +24,7 @@
     "tests": {
       "port": 8905,
       "plugins": [
-        "https://downloads.wordpress.org/plugin/openid-connect-server.zip"
+        "https://downloads.wordpress.org/plugin/openid-connect-server.2.0.3.zip"
       ],
       "themes": [],
       "config": {
