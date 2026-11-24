@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "OIDC client plugin for WordPress sites consuming the Soli Laravel provider",
   "scripts": {
-    "env:start": "wp-env start --debug",
+    "env:start": "node bin/wp-env-start.js --debug",
     "env:stop": "wp-env stop",
     "publish": "node ./publish.js",
     "test:e2e": "wp-scripts test-playwright",
